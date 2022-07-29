@@ -3,14 +3,9 @@
 }
 
 
-html {
+#dice-app {
     box-sizing: border-box;
-}
-
-
-body.dice-page {
     font-family: sans-serif;
-    margin: 32px;
 }
 
 
