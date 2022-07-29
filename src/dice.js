@@ -12,6 +12,7 @@ function main_setupDiceForm(diceCountMax = 2)
     const btnDiceAdd = $('.btn-dice-add')
     const btnDiceRemove = $('.btn-dice-remove')
     const diceIconsBlock = $('.dice-icons-block')
+    const resultsBlock = $('.dice-roll-result-block')
 
     form.addEventListener('submit', event => {
         event.preventDefault()
@@ -19,6 +20,7 @@ function main_setupDiceForm(diceCountMax = 2)
     })
 
     const diceSystem = new DiceSystem(1, diceCountMax)
+    const resultIcons = [ '⚀', '⚁', '⚂', '⚃', '⚄', '⚅' ]
 
     setupStartingDiceIcons(diceSystem, diceIconsBlock, btnDiceRemove)
 
@@ -29,8 +31,11 @@ function main_setupDiceForm(diceCountMax = 2)
         makeBtnDiceRemoveHandler(diceSystem, diceIconsBlock, btnDiceAdd))
 
     diceIconsBlock.addEventListener('click', () => {
-        console.log(diceSystem.roll())
-        animateDiceRoll(diceIconsBlock)
+        if (!diceIconsBlock.classList.contains('is-active')) {
+            const results = diceSystem.roll()
+            animateDiceRoll(diceIconsBlock)
+            displayRollsResults(results, resultIcons, resultsBlock)
+        }
     })
 }
 
@@ -138,4 +143,17 @@ function animateDiceRoll(diceIconsBlock)
     setTimeout(
         ()=>diceIconsBlock.classList.remove('animation-dice-roll', 'is-active'),
         1500)
+}
+
+
+
+function displayRollsResults(results, resultIcons, resultsBlock)
+{
+    const iconsWrapper = document.createElement('div')
+    iconsWrapper.classList.add('dice-result-icons-wrapper')
+    results.forEach(result => {
+        iconsWrapper.append(resultIcons[result-1])
+    })
+    resultsBlock.innerHTML = ''
+    resultsBlock.appendChild(iconsWrapper)
 }
