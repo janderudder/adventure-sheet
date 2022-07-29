@@ -1,8 +1,3 @@
-if (!window['$']) {
-    window['$'] = (selector) => document.querySelector(selector)
-}
-
-
 document.addEventListener('DOMContentLoaded', () =>
 {
     main_setupDiceForm()
