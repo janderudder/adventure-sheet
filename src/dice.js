@@ -39,38 +39,38 @@ function main_setupDiceForm(diceCountMax = 2)
 ////////////////////////////////////////////////////////////////////////////////
 class DiceSystem
 {
-    diceCount
-    maxDiceCount
+    _diceCount
+    _maxDiceCount
 
     constructor(diceCount=1, maxDiceCount=2) {
         if (diceCount < 0 || maxDiceCount < 1) {
             throw new Error('invalid DiceRoll constructor parameter values')
         }
-        this.diceCount = Math.min(diceCount, maxDiceCount)
-        this.maxDiceCount = maxDiceCount
+        this._diceCount = Math.min(diceCount, maxDiceCount)
+        this._maxDiceCount = maxDiceCount
     }
 
     addDice() {
-        this.diceCount = Math.min(this.diceCount+1, this.maxDiceCount)
-        return this.diceCount
+        this._diceCount = Math.min(this._diceCount+1, this._maxDiceCount)
+        return this._diceCount
     }
 
     removeDice() {
-        this.diceCount = Math.max(this.diceCount-1, 1)
-        return this.diceCount
+        this._diceCount = Math.max(this._diceCount-1, 1)
+        return this._diceCount
     }
 
     count() {
-        return this.diceCount
+        return this._diceCount
     }
 
-    icon() {
-        return '🎲'
+    maxDiceCount() {
+        return this._maxDiceCount
     }
 
     roll() {
         const rolls = []
-        for (let i=0; i<this.diceCount; ++i) {
+        for (let i=0; i<this._diceCount; ++i) {
             rolls.push(Math.ceil(Math.random() * 6))
         }
         return rolls
@@ -106,7 +106,7 @@ function makeBtnDiceAddHandler(diceSystem, diceIconsBlock, btnDiceRemove)
 {
     return function() {
         if (diceSystem.count() < diceSystem.addDice()) {
-            if (diceSystem.count() === diceSystem.maxDiceCount) {
+            if (diceSystem.count() === diceSystem.maxDiceCount()) {
                 this.disabled = true
             }
             btnDiceRemove.disabled = false
