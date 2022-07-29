@@ -12,7 +12,7 @@ function main_setupDiceForm(diceCountMax = 2)
     const btnDiceAdd = $('.btn-dice-add')
     const btnDiceRemove = $('.btn-dice-remove')
     const diceIconsBlock = $('.dice-icons-block')
-    const resultsBlock = $('.dice-roll-result-block')
+    const resultsIconsGroup = $('.dice-results-icons-grp')
 
     form.addEventListener('submit', event => {
         event.preventDefault()
@@ -34,7 +34,7 @@ function main_setupDiceForm(diceCountMax = 2)
         if (!diceIconsBlock.classList.contains('is-active')) {
             const results = diceSystem.roll()
             animateDiceRoll(diceIconsBlock)
-            displayRollsResults(results, resultIcons, resultsBlock)
+            displayRollsResults(results, resultIcons, resultsIconsGroup)
         }
     })
 }
@@ -147,13 +147,23 @@ function animateDiceRoll(diceIconsBlock)
 
 
 
-function displayRollsResults(results, resultIcons, resultsBlock)
+function displayRollsResults(results, resultIcons, resultsIconsGroup)
 {
-    const iconsWrapper = document.createElement('div')
-    iconsWrapper.classList.add('dice-result-icons-wrapper')
-    results.forEach(result => {
-        iconsWrapper.append(resultIcons[result-1])
+    resultsIconsGroup.innerHTML = ''
+
+    const resultIconNodeTemplate = document.createElement('div')
+    resultIconNodeTemplate.classList.add('dice-result-icon')
+
+    results.forEach(resultValue => {
+        const resultIconNode = resultIconNodeTemplate.cloneNode()
+        resultIconNode.innerHTML = resultIcons[resultValue-1]
+        resultsIconsGroup.appendChild(resultIconNode)
     })
-    resultsBlock.innerHTML = ''
-    resultsBlock.appendChild(iconsWrapper)
+
+    resultsIconsGroup.animate([{opacity: 1}, {opacity: 0}], {
+        duration: 0, delay: 0, fill: 'forwards'
+    })
+    resultsIconsGroup.animate([{opacity: 0}, {opacity: 1}], {
+        duration: 900, delay: 1100, fill: 'forwards'
+    })
 }
