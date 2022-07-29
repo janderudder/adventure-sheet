@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () =>
 {
-    main_setupDiceForm(2)
+    main_setupDiceForm(20)
 })
 
 
@@ -30,7 +30,7 @@ function main_setupDiceForm(diceCountMax = 2)
 
     diceIconsBlock.addEventListener('click', () => {
         console.log(diceSystem.roll())
-        diceIconsBlock.classList.add('animation-dice-roll')
+        animateDiceRoll(diceIconsBlock)
     })
 }
 
@@ -132,7 +132,10 @@ function makeBtnDiceRemoveHandler(diceSystem, diceIconsBlock, btnDiceAdd)
 
 
 
-function animateDiceRoll(diceDisplayBlock)
+function animateDiceRoll(diceIconsBlock)
 {
-
+    diceIconsBlock.classList.add('animation-dice-roll', 'is-active')
+    setTimeout(
+        ()=>diceIconsBlock.classList.remove('animation-dice-roll', 'is-active'),
+        1500)
 }
