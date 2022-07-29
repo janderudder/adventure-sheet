@@ -50,7 +50,7 @@
 }
 
 
-.dice-count-display {
+.dice-icons-block {
     font-size: 24pt;
     display: flex;
     flex-flow: column wrap;
@@ -59,14 +59,14 @@
     padding-left: 16px;
 }
 
-button.dice-count-display {
+button.dice-icons-block {
     background-color: inherit;
     border: none;
     padding: 0;
     margin: 0;
 }
 
-.dice-count-display:hover {
+.dice-icons-block:hover {
     cursor: pointer;
     transform: scale(1.3);
     transition: transform 500ms;

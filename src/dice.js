@@ -11,7 +11,7 @@ function main_setupDiceForm(diceCountMax = 2)
     const form = $('.form-dice-roll')
     const btnDiceAdd = $('.btn-dice-add')
     const btnDiceRemove = $('.btn-dice-remove')
-    const countDisplayBlock = $('.dice-count-display')
+    const diceIconsBlock = $('.dice-icons-block')
 
     form.addEventListener('submit', event => {
         event.preventDefault()
@@ -20,16 +20,17 @@ function main_setupDiceForm(diceCountMax = 2)
 
     const diceSystem = new DiceSystem(1, diceCountMax)
 
-    setupStartingDiceIcons(diceSystem, countDisplayBlock, btnDiceRemove)
+    setupStartingDiceIcons(diceSystem, diceIconsBlock, btnDiceRemove)
 
     btnDiceAdd.addEventListener('click',
-        makeBtnDiceAddHandler(diceSystem, countDisplayBlock, btnDiceRemove))
+        makeBtnDiceAddHandler(diceSystem, diceIconsBlock, btnDiceRemove))
 
     btnDiceRemove.addEventListener('click',
-        makeBtnDiceRemoveHandler(diceSystem, countDisplayBlock, btnDiceAdd))
+        makeBtnDiceRemoveHandler(diceSystem, diceIconsBlock, btnDiceAdd))
 
-    countDisplayBlock.addEventListener('click', () => {
+    diceIconsBlock.addEventListener('click', () => {
         console.log(diceSystem.roll())
+        diceIconsBlock.classList.add('animation-dice-roll')
     })
 }
 
@@ -89,10 +90,10 @@ function addDiceIcon(targetNode)
 
 
 
-function setupStartingDiceIcons(diceSystem, countDisplayBlock, btnDiceRemove)
+function setupStartingDiceIcons(diceSystem, diceIconsBlock, btnDiceRemove)
 {
     for (let i=0; i<diceSystem.count(); ++i) {
-        addDiceIcon(countDisplayBlock)
+        addDiceIcon(diceIconsBlock)
     }
     if (diceSystem.count() === 1) {
         btnDiceRemove.disabled = true
@@ -101,7 +102,7 @@ function setupStartingDiceIcons(diceSystem, countDisplayBlock, btnDiceRemove)
 
 
 
-function makeBtnDiceAddHandler(diceSystem, countDisplayBlock, btnDiceRemove)
+function makeBtnDiceAddHandler(diceSystem, diceIconsBlock, btnDiceRemove)
 {
     return function() {
         if (diceSystem.count() < diceSystem.addDice()) {
@@ -109,14 +110,14 @@ function makeBtnDiceAddHandler(diceSystem, countDisplayBlock, btnDiceRemove)
                 this.disabled = true
             }
             btnDiceRemove.disabled = false
-            addDiceIcon(countDisplayBlock)
+            addDiceIcon(diceIconsBlock)
         }
     }
 }
 
 
 
-function makeBtnDiceRemoveHandler(diceSystem, countDisplayBlock, btnDiceAdd)
+function makeBtnDiceRemoveHandler(diceSystem, diceIconsBlock, btnDiceAdd)
 {
     return function() {
         if (diceSystem.count() > diceSystem.removeDice()) {
@@ -124,7 +125,14 @@ function makeBtnDiceRemoveHandler(diceSystem, countDisplayBlock, btnDiceAdd)
                 this.disabled = true
             }
             btnDiceAdd.disabled = false
-            countDisplayBlock.removeChild(countDisplayBlock.firstChild)
+            diceIconsBlock.removeChild(diceIconsBlock.firstChild)
         }
     }
+}
+
+
+
+function animateDiceRoll(diceDisplayBlock)
+{
+
 }
