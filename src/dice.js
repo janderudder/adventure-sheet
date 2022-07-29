@@ -1,12 +1,12 @@
 document.addEventListener('DOMContentLoaded', () =>
 {
-    main_setupDiceForm()
+    main_setupDiceForm(2)
 })
 
 
 
 ////////////////////////////////////////////////////////////////////////////////
-function main_setupDiceForm()
+function main_setupDiceForm(diceCountMax = 2)
 {
     const form = $('.form-dice-roll')
     const btnDiceAdd = $('.btn-dice-add')
@@ -18,7 +18,7 @@ function main_setupDiceForm()
         return false
     })
 
-    const diceSystem = new DiceSystem(1, 3)
+    const diceSystem = new DiceSystem(1, diceCountMax)
 
     setupStartingDiceIcons(diceSystem, countDisplayBlock, btnDiceRemove)
 
