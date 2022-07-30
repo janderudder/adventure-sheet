@@ -65,6 +65,13 @@
     padding-left: 16px;
 }
 
+button.dice-icons-block { /* reset buttons styles */
+    background-color: inherit;
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
 /*  going back to scale(1) should take a different duration,
     depending on whether dice are in the process of rolling or not
     (.is-active is set when rolling) */
@@ -78,19 +85,11 @@
     transition: transform 400ms 1100ms;
 }
 
-button.dice-icons-block {
-    background-color: inherit;
-    border: none;
-    padding: 0;
-    margin: 0;
-}
-
 .dice-icons-block:hover {
     cursor: pointer;
     transform: scale(1.3);
     transition: transform 400ms;
 }
-
 .dice-icons-block.animation-dice-roll .icon-dice {
     transform: rotate(720deg);
     transition: transform 1400ms ease-out;
