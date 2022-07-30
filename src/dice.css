@@ -1,3 +1,6 @@
+/*
+    General styles & normalization
+*/
 * {
     box-sizing: inherit;
 }
@@ -8,12 +11,21 @@
     font-family: sans-serif;
 }
 
+
 #dice-app p {
     margin: 0;
     padding: 0;
 }
 
 
+button:not(:disabled) {
+    cursor: pointer;
+}
+
+
+/*
+    Layout
+*/
 .grp-horizontal {
     display: flex;
     flex-direction: row;
@@ -26,6 +38,9 @@
 }
 
 
+/*
+    App styles
+*/
 .form-dice-roll {
     height: 54px;
 }
@@ -45,14 +60,14 @@
 }
 
 
-.btn-dice-add, .btn-dice-remove {
+.btn-dice-add,
+.btn-dice-remove {
     width: 26px;
     height: 26px;
     margin-block: 2px;
     background-color: white;
     border-radius: 4px;
     border-color: black;
-    cursor: pointer;
 }
 
 
@@ -65,7 +80,7 @@
     padding-left: 16px;
 }
 
-button.dice-icons-block { /* reset buttons styles */
+button.dice-icons-block { /* remove button styles */
     background-color: inherit;
     border: none;
     padding: 0;
