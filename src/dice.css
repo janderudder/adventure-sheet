@@ -57,7 +57,7 @@
 
 
 .dice-icons-block {
-    font-size: 24pt;
+    font-size: 28pt;
     display: flex;
     flex-flow: column wrap;
     justify-content: center;
@@ -114,10 +114,11 @@ button.dice-icons-block {
 
 .dice-results-icons-grp {
     flex-wrap: wrap;
-    font-size: 68pt;
+    font-size: 78pt;
     color: black;
     width: fit-content;
     margin-inline: auto;
+    justify-content: center;
 }
 
 
@@ -136,5 +137,5 @@ button.dice-icons-block {
 .dice-results-total-grp p {
     width: 100%;
     text-align: center;
-    font-size: 18pt;
+    font-size: 20pt;
 }
