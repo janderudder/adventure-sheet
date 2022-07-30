@@ -14,6 +14,7 @@ function main_setupDiceForm(diceCountMax = 2)
     const diceIconsBlock = $('.dice-icons-block')
     const resultsBlock = $('.dice-roll-results-block')
     const resultsIconsGroup = $('.dice-results-icons-grp')
+    const totalScoreTextNode = $('.dice-result-total-score')
 
     form.addEventListener('submit', event => {
         event.preventDefault()
@@ -32,12 +33,15 @@ function main_setupDiceForm(diceCountMax = 2)
         makeBtnDiceRemoveHandler(diceSystem, diceIconsBlock, btnDiceAdd))
 
     diceIconsBlock.addEventListener('click', () => {
-        if (!diceIconsBlock.classList.contains('is-active')) {
+        if (!diceIconsBlock.classList.contains('is-active'))
+        {
+            diceIconsBlock.classList.add('is-active')
             const results = diceSystem.roll()
-            animateDiceRoll(diceIconsBlock)
+            animateDiceRoll(diceIconsBlock, function doAfterAnimation() {
+                diceIconsBlock.classList.remove('is-active')
+            })
             displayResultIcons(results, resultIcons, resultsIconsGroup)
-            $id('dice-result-total-score').innerHTML =
-                results.reduce((total, resultValue) => total += resultValue)
+            displayTotalScore(computeTotalScore(results), totalScoreTextNode)
             animateResultsBlock(resultsBlock)
         }
     })
@@ -94,6 +98,12 @@ function addDiceIcon(targetNode)
     const icon = document.createElement('div')
     icon.className = 'icon-dice'
     icon.innerHTML = '🎲'
+    icon.addEventListener('transitionstart', () => {
+        icon.classList.add('is-animated')
+    })
+    icon.addEventListener('transitionend', () => {
+        icon.classList.remove('is-animated')
+    })
     targetNode.appendChild(icon)
 }
 
@@ -114,9 +124,10 @@ function setupStartingDiceIcons(diceSystem, diceIconsBlock, btnDiceRemove)
 function makeBtnDiceAddHandler(diceSystem, diceIconsBlock, btnDiceRemove)
 {
     return function() {
+        const btnDiceAdd = this
         if (diceSystem.count() < diceSystem.addDice()) {
             if (diceSystem.count() === diceSystem.maxDiceCount()) {
-                this.disabled = true
+                btnDiceAdd.disabled = true
             }
             btnDiceRemove.disabled = false
             addDiceIcon(diceIconsBlock)
@@ -129,24 +140,30 @@ function makeBtnDiceAddHandler(diceSystem, diceIconsBlock, btnDiceRemove)
 function makeBtnDiceRemoveHandler(diceSystem, diceIconsBlock, btnDiceAdd)
 {
     return function() {
-        if (diceSystem.count() > diceSystem.removeDice()) {
-            if (diceSystem.count() === 1) {
-                this.disabled = true
+        const btnDiceRemove = this
+        const lastDiceIcon  = diceIconsBlock.lastChild
+        if (!lastDiceIcon.classList.contains('is-animated'))
+        {
+            if (diceSystem.count() > diceSystem.removeDice()) {
+                btnDiceAdd.disabled = false
+                diceIconsBlock.removeChild(lastDiceIcon)
+                if (diceSystem.count() === 1) {
+                    btnDiceRemove.disabled = true
+                }
             }
-            btnDiceAdd.disabled = false
-            diceIconsBlock.removeChild(diceIconsBlock.firstChild)
         }
     }
 }
 
 
 
-function animateDiceRoll(diceIconsBlock)
+function animateDiceRoll(diceIconsBlock, afterAnimationCallback =()=>{})
 {
-    diceIconsBlock.classList.add('animation-dice-roll', 'is-active')
-    setTimeout(
-        ()=>diceIconsBlock.classList.remove('animation-dice-roll', 'is-active'),
-        1500)
+    diceIconsBlock.classList.add('animation-dice-roll')
+    setTimeout(() => {
+        diceIconsBlock.classList.remove('animation-dice-roll')
+        afterAnimationCallback()
+    }, 1500)
 }
 
 
@@ -175,4 +192,18 @@ function animateResultsBlock(resultsBlock)
     resultsBlock.animate([{opacity: 0}, {opacity: 1}], {
         duration: 900, delay: 1100, fill: 'forwards'
     })
+}
+
+
+
+function computeTotalScore(rollResults)
+{
+    return rollResults.reduce((total, rollValue) => total += rollValue)
+}
+
+
+
+function displayTotalScore(totalValue, totalScoreTextNode)
+{
+    totalScoreTextNode.innerHTML = totalValue
 }
