@@ -1,12 +1,19 @@
 document.addEventListener('DOMContentLoaded', () =>
 {
-    main_setupDiceForm(20)
+    const config = {
+        startDiceCount: 2,
+        maxDiceCount: 16,
+        showRevealHelp: true,
+        removeRevealHelpAfterReveal: false,
+        removeRevealHelpAfterRollCount: 2
+    }
+    main_setupDiceForm(config)
 })
 
 
 
 ////////////////////////////////////////////////////////////////////////////////
-function main_setupDiceForm(diceCountMax = 2)
+function main_setupDiceForm(config)
 {
     const form                  = $('.form-dice-roll')
     const btnDiceAdd            = $('.btn-dice-add')
@@ -15,14 +22,14 @@ function main_setupDiceForm(diceCountMax = 2)
     const resultsBlock          = $('.grp-dice-results-block')
     const resultsIconsGroup     = $('.grp-dice-results-icons')
     const resultsTotalValueNode = $('.dice-results-total-value')
-    const helpTotalReveal       = $('.grp-dice-results-block .help')
+    const helpTotalRevealNode   = $('.grp-dice-results-block .help')
 
     form.addEventListener('submit', event => {
         event.preventDefault()
         return false
     })
 
-    const diceSystem = new DiceSystem(1, diceCountMax)
+    const diceSystem = new DiceSystem(config.startDiceCount,config.maxDiceCount)
     const resultIcons = [ '⚀', '⚁', '⚂', '⚃', '⚄', '⚅' ]
 
     setupStartingDiceIcons(diceSystem, diceIconsBlock, btnDiceRemove)
@@ -56,6 +63,9 @@ function main_setupDiceForm(diceCountMax = 2)
             writeTotalScore(computeDiceTotal(results), resultsTotalValueNode)
 
             animateResultsBlock(resultsBlock)
+
+            // show help (won't show if class .is-removed is set)
+            helpTotalRevealNode.style.display = ''
         }
     })
 
@@ -66,11 +76,18 @@ function main_setupDiceForm(diceCountMax = 2)
             // make the dice icons not clickable anymore
             resultsIconsGroup.classList.remove('is-active')
             resultsTotalValueNode.style.opacity = '1'
+            helpTotalRevealNode.style.display = 'none'
         }
     })
 
-    setHelpMessageHidingEventHandlers(
-        helpTotalReveal, diceIconsBlock, resultsIconsGroup)
+    if (!config.showRevealHelp) {
+        helpTotalRevealNode.classList.add('is-removed')
+    } else {
+        setRevealHelpHidingEventHandlers(
+            config.removeRevealHelpAfterReveal,
+            config.removeRevealHelpAfterRollCount,
+            helpTotalRevealNode, diceIconsBlock, resultsIconsGroup)
+    }
 }
 
 
@@ -236,23 +253,28 @@ function writeTotalScore(totalValue, resultsTotalValueNode)
 
 
 
-function setHelpMessageHidingEventHandlers(
-    helpTotalReveal, diceIconsBlock, resultsIconsGroup)
+function setRevealHelpHidingEventHandlers(
+    hideAfterReveal, rollCountBeforeHide,
+    helpTotalRevealNode, diceIconsBlock, resultsIconsGroup)
 {
-    // Signal for manual and automatic hiding of the help message
     const helpMessageHideController = new AbortController()
-
-    // hide after two rolls (auto)
-    let rollCount = 0
-    diceIconsBlock.addEventListener('click', function handleHelpHiding() {
-        if (++rollCount>2) {
-            helpTotalReveal.classList.add('is-removed')
+    // Hide after roll count
+    if (rollCountBeforeHide > 0) {
+        let rollCount = 0
+        diceIconsBlock.addEventListener('click', function autoHideHandler() {
+            if (++rollCount > rollCountBeforeHide) {
+                helpTotalRevealNode.classList.add('is-removed')
+                helpMessageHideController.abort()
+            }
+            console.log('autoHideHandler', this.name)
+        }, {signal: helpMessageHideController.signal})
+    }
+    // Hide after tap on results
+    resultsIconsGroup.addEventListener('click', function manualHideHandler() {
+        if (hideAfterReveal) {
+            helpTotalRevealNode.classList.add('is-removed')
             helpMessageHideController.abort()
         }
-    }, {signal: helpMessageHideController.signal})
-
-    // or after one tap on results / total reveal (manual)
-    resultsIconsGroup.addEventListener('click', function hideHelp() {
-        helpTotalReveal.classList.add('is-removed')
-    }, {once:true, signal:helpMessageHideController.signal})
+        console.log('manualHideHandler')
+    }, {signal:helpMessageHideController.signal})
 }
