@@ -15,6 +15,7 @@ function main_setupDiceForm(diceCountMax = 2)
     const resultsBlock          = $('.grp-dice-results-block')
     const resultsIconsGroup     = $('.grp-dice-results-icons')
     const resultsTotalValueNode = $('.dice-results-total-value')
+    const helpTotalReveal       = $('.grp-dice-results-block .help')
 
     form.addEventListener('submit', event => {
         event.preventDefault()
@@ -67,6 +68,9 @@ function main_setupDiceForm(diceCountMax = 2)
             resultsTotalValueNode.style.opacity = '1'
         }
     })
+
+    setHelpMessageHidingEventHandlers(
+        helpTotalReveal, diceIconsBlock, resultsIconsGroup)
 }
 
 
@@ -228,4 +232,27 @@ function computeDiceTotal(results)
 function writeTotalScore(totalValue, resultsTotalValueNode)
 {
     resultsTotalValueNode.innerHTML = totalValue
+}
+
+
+
+function setHelpMessageHidingEventHandlers(
+    helpTotalReveal, diceIconsBlock, resultsIconsGroup)
+{
+    // Signal for manual and automatic hiding of the help message
+    const helpMessageHideController = new AbortController()
+
+    // hide after two rolls (auto)
+    let rollCount = 0
+    diceIconsBlock.addEventListener('click', function handleHelpHiding() {
+        if (++rollCount>2) {
+            helpTotalReveal.classList.add('is-removed')
+            helpMessageHideController.abort()
+        }
+    }, {signal: helpMessageHideController.signal})
+
+    // or after one tap on results / total reveal (manual)
+    resultsIconsGroup.addEventListener('click', function hideHelp() {
+        helpTotalReveal.classList.add('is-removed')
+    }, {once:true, signal:helpMessageHideController.signal})
 }
