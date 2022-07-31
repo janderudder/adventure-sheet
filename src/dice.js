@@ -8,13 +8,13 @@ document.addEventListener('DOMContentLoaded', () =>
 ////////////////////////////////////////////////////////////////////////////////
 function main_setupDiceForm(diceCountMax = 2)
 {
-    const form = $('.form-dice-roll')
-    const btnDiceAdd = $('.btn-dice-add')
-    const btnDiceRemove = $('.btn-dice-remove')
-    const diceIconsBlock = $('.dice-icons-block')
-    const resultsBlock = $('.dice-roll-results-block')
-    const resultsIconsGroup = $('.dice-results-icons-grp')
-    const totalScoreTextNode = $('.dice-result-total-score')
+    const form               = $('.form-dice-roll')
+    const btnDiceAdd         = $('.btn-dice-add')
+    const btnDiceRemove      = $('.btn-dice-remove')
+    const diceIconsBlock     = $('.dice-icons-block')
+    const resultsBlock       = $('.dice-roll-results-block')
+    const resultsIconsGroup  = $('.dice-results-icons-grp')
+    const totalScoreTextNode = $('.dice-results-total-score')
 
     form.addEventListener('submit', event => {
         event.preventDefault()
