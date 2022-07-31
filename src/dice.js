@@ -32,17 +32,39 @@ function main_setupDiceForm(diceCountMax = 2)
     btnDiceRemove.addEventListener('click',
         makeBtnDiceRemoveHandler(diceSystem, diceIconsBlock, btnDiceAdd))
 
-    diceIconsBlock.addEventListener('click', () => {
+    diceIconsBlock.addEventListener('click', function doRoll() {
         if (!diceIconsBlock.classList.contains('is-active'))
         {
+            // notify the system that the dice icons are rolling
             diceIconsBlock.classList.add('is-active')
-            const results = diceSystem.roll()
+
+            // make result icons non-clickable (although they will be made
+            // invisible a few lines below)
+            resultsIconsGroup.classList.remove('is-active')
+
             animateDiceRoll(diceIconsBlock, function doAfterAnimation() {
                 diceIconsBlock.classList.remove('is-active')
+                resultsIconsGroup.classList.add('is-active') // make clickable
             })
+
+            const results = diceSystem.roll()
             displayResultIcons(results, resultIcons, resultsIconsGroup)
-            displayTotalScore(computeDiceTotal(results), resultsTotalValueNode)
+
+            // hide total score value
+            resultsTotalValueNode.style.opacity = '0'
+            writeTotalScore(computeDiceTotal(results), resultsTotalValueNode)
+
             animateResultsBlock(resultsBlock)
+        }
+    })
+
+    // show total value when the result icons are clicked
+    resultsIconsGroup.addEventListener('click', function makeTotalVisible() {
+        // while not in the process of rolling the dice
+        if (!diceIconsBlock.classList.contains('is-active')) {
+            // make the dice icons not clickable anymore
+            resultsIconsGroup.classList.remove('is-active')
+            resultsTotalValueNode.style.opacity = '1'
         }
     })
 }
@@ -203,7 +225,7 @@ function computeDiceTotal(results)
 
 
 
-function displayTotalScore(totalValue, resultsTotalValueNode)
+function writeTotalScore(totalValue, resultsTotalValueNode)
 {
     resultsTotalValueNode.innerHTML = totalValue
 }

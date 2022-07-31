@@ -82,6 +82,7 @@ button.grp-dice-icons-block { /* remove button styles */
 
 
 .grp-dice-results-block {
+    width: 100%;
     opacity: 0;
 }
 
@@ -95,6 +96,10 @@ button.grp-dice-icons-block { /* remove button styles */
     justify-content: center;
 }
 
+.grp-dice-results-icons.is-active {
+    cursor: pointer;
+}
+
 
 .dice-result-icon {
     margin-inline: 24px;
@@ -103,13 +108,13 @@ button.grp-dice-icons-block { /* remove button styles */
 }
 
 
-.grp-dice-results-total {
-    margin-top: 24px;
 }
 
 
-.grp-dice-results-total p {
-    width: 100%;
-    text-align: center;
+.dice-results-total-value {
+    margin-top: 24px;
+    width: fit-content;
+    margin-inline: auto;
     font-size: 20pt;
+    transition: opacity 300ms ease-out;
 }
