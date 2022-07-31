@@ -8,13 +8,13 @@ document.addEventListener('DOMContentLoaded', () =>
 ////////////////////////////////////////////////////////////////////////////////
 function main_setupDiceForm(diceCountMax = 2)
 {
-    const form               = $('.form-dice-roll')
-    const btnDiceAdd         = $('.btn-dice-add')
-    const btnDiceRemove      = $('.btn-dice-remove')
-    const diceIconsBlock     = $('.dice-icons-block')
-    const resultsBlock       = $('.dice-roll-results-block')
-    const resultsIconsGroup  = $('.dice-results-icons-grp')
-    const totalScoreTextNode = $('.dice-results-total-score')
+    const form                  = $('.form-dice-roll')
+    const btnDiceAdd            = $('.btn-dice-add')
+    const btnDiceRemove         = $('.btn-dice-remove')
+    const diceIconsBlock        = $('.grp-dice-icons-block')
+    const resultsBlock          = $('.grp-dice-results-block')
+    const resultsIconsGroup     = $('.grp-dice-results-icons')
+    const resultsTotalValueNode = $('.dice-results-total-value')
 
     form.addEventListener('submit', event => {
         event.preventDefault()
@@ -41,7 +41,7 @@ function main_setupDiceForm(diceCountMax = 2)
                 diceIconsBlock.classList.remove('is-active')
             })
             displayResultIcons(results, resultIcons, resultsIconsGroup)
-            displayTotalScore(computeTotalScore(results), totalScoreTextNode)
+            displayTotalScore(computeDiceTotal(results), resultsTotalValueNode)
             animateResultsBlock(resultsBlock)
         }
     })
@@ -196,14 +196,14 @@ function animateResultsBlock(resultsBlock)
 
 
 
-function computeTotalScore(rollResults)
+function computeDiceTotal(results)
 {
-    return rollResults.reduce((total, rollValue) => total += rollValue)
+    return results.reduce((total, rollValue) => total += rollValue, 0)
 }
 
 
 
-function displayTotalScore(totalValue, totalScoreTextNode)
+function displayTotalScore(totalValue, resultsTotalValueNode)
 {
-    totalScoreTextNode.innerHTML = totalValue
+    resultsTotalValueNode.innerHTML = totalValue
 }
