@@ -6,13 +6,13 @@
 }
 
 
-#dice-app {
+#dice-root {
     box-sizing: border-box;
     font-family: sans-serif;
 }
 
 
-#dice-app p {
+#dice-root p {
     margin: 0;
     padding: 0;
 }
