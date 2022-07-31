@@ -1,0 +1,50 @@
+/*
+    Normalize
+*/
+* {
+    box-sizing: inherit;
+}
+
+html {
+    box-sizing: border-box;
+}
+
+p {
+    margin: 0;
+    padding: 0;
+}
+
+
+/*
+    States
+*/
+.is-removed {
+    display: none;
+}
+
+button:not(:disabled) {
+    cursor: pointer;
+}
+
+
+/*
+    Layout
+*/
+.grp-horizontal {
+    display: flex;
+    flex-direction: row;
+}
+
+.grp-vertical {
+    display: flex;
+    flex-direction: column;
+}
+
+
+/*
+    Page styles
+*/
+body {
+    font-family: sans-serif;
+    font-size: 16pt;
+}
